@@ -44,7 +44,7 @@ class GameEngine(object):
         self.size = vec(*RESOLUTION)
         self.background = Drawable((0,0), "background.png")
         # self.timer = TimerStatic(2)
-        self.lanes=[(700,25),(700,100),(700,175),(700,250)]
+        self.lanes=[(700,55),(700,130),(700,215),(700,300)]
         self.zom = False
     
     

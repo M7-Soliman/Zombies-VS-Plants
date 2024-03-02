@@ -30,9 +30,9 @@ class MovementFSM(AbstractGameFSM):
 
 class AccelerationFSM(MovementFSM):
     """Axis-based acceleration with gradual stopping."""
-    not_moving = State()
+    not_moving = State(initial=True)
     
-    negative = State(initial=True)
+    negative = State()
     positive = State()
     
     stalemate = State()

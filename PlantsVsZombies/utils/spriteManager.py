@@ -32,7 +32,7 @@ class SpriteManager(object):
       _IMAGE_FOLDER = "images"
       
       # Static information about the sprite sizes of particular image sheets.
-      _SPRITE_SIZES = {"artorias.png": (240,320) , "orb.png": (32,32), "kirby.png": (16,16), "zom.png": (63,68)
+      _SPRITE_SIZES = {"artorias.png": (240,320) , "orb.png": (32,32), "kirby.png": (16,16), "zom.png": (64,68)
       }
       
       # A default sprite size

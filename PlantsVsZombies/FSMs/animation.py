@@ -22,18 +22,36 @@ class WalkingFSM(AnimateFSM):
     """Two-state FSM for walking / stopping in
        a top-down environment."""
        
-    standing = State()
-    moving   = State(initial=True)
-    
-    move = standing.to(moving)
+    standing = State(initial=True)
+    moving   = State()
+    damage1= State()
+    damage2= State()
+    damage3= State()
+    damage4= State()
+    # dead= State()
+
+    move = standing.to(moving)  | damage1.to(moving)  | damage1.to(moving)  | damage1.to(moving)  | damage1.to(moving)  
     stop = moving.to(standing)
+    hurt1 = moving.to(damage1)
+    hurt2 = damage1.to(damage2)
+    hurt3 = damage2.to(damage3)
+    hurt4 = damage3.to(damage4)
+    # die = damage4.to(dead)
         
     
     def updateState(self):
-        if self.hasVelocity() and self != "moving":
+        if self.obj.hp == 8 and self == "moving":
+            self.hurt1()
+        if self.obj.hp == 6 and self == "damage1":
+                self.hurt2()
+        if self.obj.hp == 4 and self == "damage2":
+                self.hurt3()
+        if self.obj.hp == 2 and self == "damage3":
+                self.hurt4()
+        if self.hasVelocity() and self == "standing":
             self.move()
-        elif not self.hasVelocity() and self != "standing":
-            self.stop()
+        # elif not self.hasVelocity() and self != "standing":
+        #     self.stop()
     
     def hasVelocity(self):
         return magnitude(self.obj.velocity) > EPSILON
