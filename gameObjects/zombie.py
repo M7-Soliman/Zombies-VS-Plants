@@ -13,6 +13,7 @@ import numpy as np
 
 
 class Zombie(Mobile):
+   Zombiecount=4
    def __init__(self, position):
       super().__init__(position, "zom.png")
         

@@ -3,6 +3,7 @@ import pygame
 from . import Drawable, kirby
 from .kirby import Kirby
 from .zombie import Zombie
+from UI import TextEntry
 from .orb import orb
 import math
 import copy
@@ -47,11 +48,13 @@ class GameEngine(object):
         # self.timer = TimerStatic(2)
         self.lanes=[(700,55),(700,130),(700,215),(700,300)]
         self.zom = False
+        self.tankcount= TextEntry((62,62),str(Zombie.Zombiecount))
     
     
     def draw(self, drawSurface):        
         self.background.draw(drawSurface)
         self.tankicon.draw(drawSurface)
+        self.tankcount.draw(drawSurface)
         [o.draw(drawSurface) for o in self.orbs]
         [o.draw(drawSurface) for o in self.zombies]
         # self.zombie.draw(drawSurface)
@@ -71,11 +74,11 @@ class GameEngine(object):
                 mousePosition = vec(*event.pos) // SCALE - vec(25, 25)
                 self.orbs.append(orb(position=(0,mousePosition[1])))
        
-            if self.zom:
+            if self.zom and Zombie.Zombiecount > 0:
                 mousePosition = vec(*event.pos) // SCALE - vec(32,34)
                 mousePosition=closest_position(mousePosition,self.lanes)
                 self.zombies.append(Zombie((700,mousePosition[1])))
-            
+                Zombie.Zombiecount -=1
     def update(self, seconds):
         # self.zombie.update(seconds)
         # self.timer.update(seconds)
@@ -85,7 +88,7 @@ class GameEngine(object):
         #     if len(self.orbs) < 10:
         #         self.orbs = [orb((0,5)),orb((0,45)),orb((0,85)),orb((0,125)),orb((0,165)),orb((0,205)),orb((0,245)),orb((0,285)),orb((0,325)),orb((0,365))]
 
-            
+        self.tankcount= TextEntry((62,62),str(Zombie.Zombiecount))
         [o.update(seconds) for o in self.orbs]
         [o.update(seconds) for o in self.zombies]
         
@@ -103,6 +106,7 @@ class GameEngine(object):
         for j in range(len(self.zombies)):
             if self.zombies[j].hp <=0:
                 self.zombies.pop(j) 
+                Zombie.Zombiecount +=1
                 break
       
         # Drawable.updateOffset(self.zombie, self.size)
