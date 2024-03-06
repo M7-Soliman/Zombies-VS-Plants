@@ -32,17 +32,17 @@ class SpriteManager(object):
       _IMAGE_FOLDER = "images"
       
       # Static information about the sprite sizes of particular image sheets.
-      _SPRITE_SIZES = {"artorias.png": (240,320) , "orb.png": (32,32), "kirby.png": (16,16), "zom.png": (64,64)
+      _SPRITE_SIZES = {"artorias.png": (240,320) , "orb2.png": (30, 30), "kirby.png": (16,16), "zom.png": (64,64), "plany.png":(118, 130)
       }
       
       # A default sprite size
       _DEFAULT_SPRITE = (32,32)
       
       # A list of images that require to be loaded with transparency
-      _TRANSPARENCY = ["artorias.png","orb.png","star.png","kirby.png","zom.png"]
+      _TRANSPARENCY = ["artorias.png","orb2.png","star.png","kirby.png","zom.png", "plany.png"]
       
       # A list of images that require to be loaded with a color key
-      _COLOR_KEY = ["orb.png","star.png","kirby.png","zom.png"]
+      _COLOR_KEY = ["orb2.png","star.png","kirby.png","zom.png", "plany.png"]
       
       def __init__(self):
          # Stores the surfaces indexed based on file name

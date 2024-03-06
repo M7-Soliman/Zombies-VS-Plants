@@ -17,6 +17,7 @@ class Zombie(Mobile):
    def __init__(self, position):
       super().__init__(position, "zom.png")
         
+      
       # # Animation variables specific to Kirby
       self.framesPerSecond = 6
       self.nFrames = 6
