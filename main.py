@@ -1,7 +1,6 @@
 import pygame
 from UI import ScreenManager
 from utils import RESOLUTION, UPSCALED
-
 def main():
     #Initialize the module
     pygame.init()

@@ -52,14 +52,13 @@ class Zombie(Mobile):
          "standing" : 8
       }
             
-            
+      
       self.hp = 10
       self.attack=5
       self.pow = False
       # self.hitBox = rectAdd(self.position, self.getRect())
       self.FSManimated = animation.WalkingFSM(self)
       self.LR = movement.AccelerationFSM(self, axis=0)
-      self.UD = movement.AccelerationFSM(self, axis=1)
       self.spawn = True
       self.dead =  True
       
@@ -81,7 +80,6 @@ class Zombie(Mobile):
          self.LR.decrease()
          self.spawn=False
       self.LR.update(seconds)
-      self.UD.update(seconds)
       self.hitBox = rectAdd(self.position, self.getRect())
       super().update(seconds)
 

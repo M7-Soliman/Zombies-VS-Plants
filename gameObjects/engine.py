@@ -159,10 +159,13 @@ class GameEngine(object):
             
         for j in range(len(self.zombies)):
             for r in range(len(self.plants)):
-                if self.plants[r].hitBox.colliderect(self.zombies[j].hitBox):
+                if self.plants[r].hitBox.colliderect(self.zombies[j].hitBox) and self.zombies[j].FSManimated != "standing":
                     self.plants[r].hp -= self.zombies[j].attack
+                    self.zombies[j].LR.stop_all()
+                    print(self.zombies[j].LR.current_state.id)
                     break
-
+                elif self.zombies[j].LR.current_state.id == "not_moving" and self.zombies[j].spawn != True:
+                        self.zombies[j].LR.decrease()
 
   
 
