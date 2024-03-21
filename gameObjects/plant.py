@@ -15,9 +15,12 @@ import numpy as np
 
 
 class Plant(Drawable):
-   def __init__(self, position):
+   def __init__(self, position, shooting, timer, starting):
       super().__init__(position, "plany.png")
       self.hp=100
+      self.shooting = shooting
+      self.timer = timer
+      self.starting = starting
       #Descaling
       scale_factor = 0.3
       original_image = self.image.copy()  # Create a copy of the original image
@@ -28,6 +31,9 @@ class Plant(Drawable):
       # self.FSManimated = animation.WalkingFSM(self)
       # self.LR = movement.AccelerationFSM(self, axis=0)
       # self.UD = movement.AccelerationFSM(self, axis=1)
+      
+      self.attackRange = pygame.Rect(self.position[0], self.position[1], 500, 50) 
+      
       self.dead =  False
       
    def getRect(self):
@@ -43,3 +49,6 @@ class Plant(Drawable):
       
       self.hitBox = rectAdd(self.position, self.getRect())
       super().update(seconds)
+
+   def draw_attack_range(self, screen):
+      pygame.draw.rect(screen, (255, 0, 0), self.attackRange, 2) 
