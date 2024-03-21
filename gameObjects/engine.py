@@ -8,7 +8,7 @@ from .orb import Orb
 import math
 import copy
 from utils import vec, RESOLUTION, SCALE
-
+from soundManager2 import *
 from .plant import Plant
 
 def closest_position(mouse_click, position_list):
@@ -58,7 +58,8 @@ class GameEngine(object):
         self.zom = False
         self.tankcount= TextEntry((62,62),str(Zombie.Zombiecount))
         self.orb_creation_timer = 0
-    
+
+        
     def draw(self, drawSurface):        
         self.background.draw(drawSurface)
         self.tankicon.draw(drawSurface)
@@ -79,6 +80,7 @@ class GameEngine(object):
             if event.key == pygame.K_1:
                 self.zom = False
         if event.type == pygame.MOUSEBUTTONDOWN:
+          
             # if not self.zom:
                 # mousePosition = vec(*event.pos) // SCALE - vec(25, 25)
                 # self.orbs.append(orb(position=(0,mousePosition[1])))
@@ -113,7 +115,10 @@ class GameEngine(object):
         
         for orb in self.orbs:
             orb.update(seconds)
-                    
+            if orb.position[0]>800:
+                self.orbs.remove(orb)
+                print(len(self.orbs))
+                
         for j in range(len(self.zombies)):
             for r in range(len(self.orbs)):
                 if self.orbs[r].hitBox.colliderect(self.zombies[j].hitBox):
@@ -123,14 +128,25 @@ class GameEngine(object):
   
         for j in range(len(self.zombies)):
             if self.zombies[j].hp <=0:
-                self.zombies.pop(j) 
+                self.zombies.pop(j)  
+            # elif self.zombies[j].pos < 0:
+            #     self.zombies.pop(j) 
+            #     Zombie.Zombiecount +=1
+            break
+    
+    
+        for j in range(len(self.plants)):
+            if self.plants[j].hp <=0:
+                self.plants.pop(j) 
                 Zombie.Zombiecount +=1
                 break
-    
+            
         for j in range(len(self.zombies)):
             for r in range(len(self.plants)):
                 if self.plants[r].hitBox.colliderect(self.zombies[j].hitBox):
-                    self.plants.pop(r) 
+                    # self.plants.pop(r) 
+                    self.plants[r].hp -= 1
+                    print( self.plants[r].hp)
                     break
 
         # Drawable.updateOffset(self.zombie, self.size)

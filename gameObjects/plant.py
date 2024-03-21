@@ -17,15 +17,13 @@ import numpy as np
 class Plant(Drawable):
    def __init__(self, position):
       super().__init__(position, "plany.png")
-        
+      self.hp=100
       #Descaling
       scale_factor = 0.3
       original_image = self.image.copy()  # Create a copy of the original image
       scaled_width = int(original_image.get_width() * scale_factor)
       scaled_height = int(original_image.get_height() * scale_factor)
       self.image = transform.smoothscale(original_image, (scaled_width, scaled_height))
-
-      self.hp = 5
       self.hitBox = rectAdd(self.position, self.getRect())
       # self.FSManimated = animation.WalkingFSM(self)
       # self.LR = movement.AccelerationFSM(self, axis=0)
