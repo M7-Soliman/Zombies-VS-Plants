@@ -26,8 +26,15 @@ class ScreenManager(object):
                                  RESOLUTION // 2 + vec(0,50),
                                  lambda x: x.type == KEYDOWN and x.key == K_2,
                                  center="both")
-    
-    
+        # self.levelmenu= EventMenu("background.png", fontName="default8")
+        # self.levelmenu.addOption("start", "Press 1 to start Game",
+        #                          RESOLUTION // 2 - vec(0,50),
+        #                          lambda x: x.type == KEYDOWN and x.key == K_1,
+        #                          center="both")
+        # self.levelmenu.addOption("exit", "Press 2 to exit Game",
+        #                          RESOLUTION // 2 + vec(0,50),
+        #                          lambda x: x.type == KEYDOWN and x.key == K_2,
+        #                          center="both")
     def draw(self, drawSurf):
         if self.state.isInGame():
             self.game.draw(drawSurf)
@@ -40,6 +47,8 @@ class ScreenManager(object):
     
     def handleEvent(self, event):
         if self.state in ["game", "paused"]:
+            if len(self.game.plants)==0:
+                self.state.quitGame()
             if event.type == KEYDOWN and event.key == K_m:
                 self.state.quitGame()
             elif event.type == KEYDOWN and event.key == K_p:

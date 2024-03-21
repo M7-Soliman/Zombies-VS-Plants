@@ -14,15 +14,23 @@ import pygame
 import numpy as np
 
 
+def changColor(image, color):
+      colouredImage = pygame.Surface(image.get_size())
+      colouredImage.fill(color)
+      
+      finalImage = image.copy()
+      finalImage.blit(colouredImage, (0, 0), special_flags = pygame.BLEND_MULT)
+      return finalImage
+
 class Plant(Drawable):
-   def __init__(self, position, shooting, timer, starting):
+   def __init__(self, position, shooting, timer, starting,reward=False):
       super().__init__(position, "plany.png")
 
       self.hp=500
       self.shooting = shooting
       self.timer = timer
       self.starting = starting
-
+      self.reward=reward
       #Descaling
       scale_factor = 0.3
       original_image = self.image.copy()  # Create a copy of the original image
@@ -40,15 +48,16 @@ class Plant(Drawable):
       
    def getRect(self):
         return self.image.get_rect()
+   
+   def draw(self, drawSurface):
+      if self.reward:
+         color_image = changColor(self.image, (255,0,255))
+         drawSurface.blit(color_image, list(map(int, self.position - Drawable.CAMERA_OFFSET)))
+      else:
+          drawSurface.blit(self.image, list(map(int, self.position - Drawable.CAMERA_OFFSET)))
+     
      
    def update(self, seconds): 
-      # print(self.frame)
-      # if self.frame == 5 and self.spawn==True:
-      #    self.FSManimated.move()
-      #    self.LR.decrease()
-      # self.LR.update(seconds)
-      # self.UD.update(seconds)
-      
       self.hitBox = rectAdd(self.position, self.getRect())
       super().update(seconds)
 

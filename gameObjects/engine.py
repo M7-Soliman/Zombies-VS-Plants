@@ -45,10 +45,10 @@ class GameEngine(object):
         r=[5,58,58*2, 58*3, 58*4, 58*5]
         c=[80, 80*2, 80*3, 80*4, 80*5]
         
-        self.plants=[Plant((r[0], c[0]), 0, 0, 0), Plant((r[0], c[1]), 0, 0, 0), Plant((r[0], c[2]), 0, 0, 0), Plant((r[0], c[3]), 0, 0, 0),
-                     Plant((r[1], c[0]), 0, 0, 0), Plant((r[1], c[1]), 0, 0, 0), Plant((r[1], c[2]), 0, 0, 0), Plant((r[1], c[3]), 0, 0, 0),
-                     Plant((r[2], c[0]), 0, 0, 0), Plant((r[2], c[1]), 0, 0, 0), Plant((r[2], c[2]), 0, 0, 0), 
-                     Plant((r[3], c[0]), 0, 0, 0), Plant((r[3], c[1]), 0, 0, 0)]
+        self.plants=[Plant((r[0], c[0]), 0, 0, 0,reward=True), Plant((r[0], c[1]), 0, 0, 0,reward=True), Plant((r[0], c[2]), 0, 0, 0),
+                     Plant((r[1], c[0]), 0, 0, 0), Plant((r[1], c[1]), 0, 0, 0), Plant((r[1], c[2]), 0, 0, 0,reward=True), 
+                     Plant((r[2], c[0]), 0, 0, 0), Plant((r[2], c[1]), 0, 0, 0), Plant((r[2], c[2]), 0, 0, 0,reward=True), 
+                     Plant((r[3], c[0]), 0, 0, 0), Plant((r[3], c[1]), 0, 0, 0,reward=True)]
         
         self.size = vec(*RESOLUTION)
         self.background = Drawable((0,0), "background.png")
@@ -81,10 +81,7 @@ class GameEngine(object):
             if event.key == pygame.K_1:
                 self.zom = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-          
-            # if not self.zom:
-                # mousePosition = vec(*event.pos) // SCALE - vec(25, 25)
-                # self.orbs.append(orb(position=(0,mousePosition[1])))
+
        
             if self.zom and Zombie.Zombiecount > 0:
                 mousePosition = vec(*event.pos) // SCALE - vec(32,34)
@@ -150,26 +147,23 @@ class GameEngine(object):
         for j in range(len(self.zombies)):
             if self.zombies[j].hp <=0:
                 self.zombies.pop(j)  
-            # elif self.zombies[j].pos < 0:
-            #     self.zombies.pop(j) 
-            #     Zombie.Zombiecount +=1
             break
     
     
         for j in range(len(self.plants)):
             if self.plants[j].hp <=0:
                 self.plants.pop(j) 
-                Zombie.Zombiecount +=1
+                if self.plants[j].reward:
+                    Zombie.Zombiecount +=1
                 break
             
         for j in range(len(self.zombies)):
             for r in range(len(self.plants)):
                 if self.plants[r].hitBox.colliderect(self.zombies[j].hitBox):
-                    # self.plants.pop(r) 
                     self.plants[r].hp -= self.zombies[j].attack
                     break
 
-        # Drawable.updateOffset(self.zombie, self.size)
+
   
 
 
