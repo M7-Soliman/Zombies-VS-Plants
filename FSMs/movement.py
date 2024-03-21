@@ -59,7 +59,7 @@ class AccelerationFSM(MovementFSM):
 
     def update(self, seconds=0):
         if self.obj.pow ==True:
-            AccelerationFSM.mul = 2
+            AccelerationFSM.mul = 4
         else:
             AccelerationFSM.mul = 1
         if self == "positive":
