@@ -73,6 +73,7 @@ class GameEngine(object):
     def handleEvent(self, event):
               
         # self.zombie.handleEvent(event)
+        [o.handleEvent(event) for o in self.zombies]
         if event.type == pygame.KEYDOWN :
             if event.key == pygame.K_1:
                 self.zom = True
@@ -117,7 +118,7 @@ class GameEngine(object):
             orb.update(seconds)
             if orb.position[0]>800:
                 self.orbs.remove(orb)
-                print(len(self.orbs))
+
                 
         for j in range(len(self.zombies)):
             for r in range(len(self.orbs)):
@@ -145,8 +146,7 @@ class GameEngine(object):
             for r in range(len(self.plants)):
                 if self.plants[r].hitBox.colliderect(self.zombies[j].hitBox):
                     # self.plants.pop(r) 
-                    self.plants[r].hp -= 1
-                    print( self.plants[r].hp)
+                    self.plants[r].hp -= self.zombies[j].attack
                     break
 
         # Drawable.updateOffset(self.zombie, self.size)

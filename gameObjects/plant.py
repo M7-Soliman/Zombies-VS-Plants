@@ -17,7 +17,7 @@ import numpy as np
 class Plant(Drawable):
    def __init__(self, position):
       super().__init__(position, "plany.png")
-      self.hp=100
+      self.hp=500
       #Descaling
       scale_factor = 0.3
       original_image = self.image.copy()  # Create a copy of the original image

@@ -28,7 +28,8 @@ class Zombie(Mobile):
          "damage2"   : 8,
          "damage3"   : 8,
          "damage4"   : 8,
-         "standing" : 6
+         "standing" : 6,
+          "powered"   : 8
       }
       
       self.rowList = {
@@ -37,7 +38,8 @@ class Zombie(Mobile):
          "damage2"   : 3,
          "damage3"   : 4,
          "damage4"   : 5,
-         "standing" : 0
+         "standing" : 0,
+         "powered"   : 6
       }
       
       self.framesPerSecondList = {
@@ -46,11 +48,14 @@ class Zombie(Mobile):
          "damage2"   : 8,
          "damage3"   : 8,
          "damage4"   : 8,
+         "powered"   : 8,
          "standing" : 8
       }
             
             
       self.hp = 10
+      self.attack=5
+      self.pow = False
       # self.hitBox = rectAdd(self.position, self.getRect())
       self.FSManimated = animation.WalkingFSM(self)
       self.LR = movement.AccelerationFSM(self, axis=0)
@@ -58,36 +63,16 @@ class Zombie(Mobile):
       self.spawn = True
       self.dead =  True
       
+      
    def getRect(self):
         return self.image.get_rect()
       
-   # def handleEvent(self, event):
-   #    if event.type == KEYDOWN:
-   #       if event.key == K_UP:
-   #          self.UD.decrease()
-             
-   #       elif event.key == K_DOWN:
-   #          self.UD.increase()
-            
-   #       elif event.key == K_LEFT:
-   #          self.LR.decrease()
-            
-   #       elif event.key == K_RIGHT:
-   #          self.LR.increase()
-            
-   #    elif event.type == KEYUP:
-   #       if event.key == K_UP:
-   #          self.UD.stop_decrease()
-             
-   #       elif event.key == K_DOWN:
-   #          self.UD.stop_increase()
-             
-            
-   #       elif event.key == K_LEFT:
-   #          self.LR.stop_decrease()
-            
-   #       elif event.key == K_RIGHT:
-   #          self.LR.stop_increase()
+   def handleEvent(self, event):
+      if event.type == KEYDOWN:
+         if event.key == K_UP:
+            self.pow=True
+            self.hp=10
+            self.attack=10
    
    def update(self, seconds): 
       # print(self.frame)
@@ -99,6 +84,7 @@ class Zombie(Mobile):
       self.UD.update(seconds)
       self.hitBox = rectAdd(self.position, self.getRect())
       super().update(seconds)
+
 
    # def updateMovement(self):
    #    pressed = pygame.key.get_pressed()
