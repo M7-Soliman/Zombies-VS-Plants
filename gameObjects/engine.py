@@ -45,10 +45,10 @@ class GameEngine(object):
         r=[5,58,58*2, 58*3, 58*4, 58*5]
         c=[80, 80*2, 80*3, 80*4, 80*5]
         
-        self.plants=[Plant((r[0], c[0])), Plant((r[0], c[1])), Plant((r[0], c[2])), Plant((r[0], c[3])),
-                     Plant((r[1], c[0])), Plant((r[1], c[1])), Plant((r[1], c[2])), Plant((r[1], c[3])),
-                     Plant((r[2], c[0])), Plant((r[2], c[1])), Plant((r[2], c[2])), 
-                     Plant((r[3], c[0])), Plant((r[3], c[1]))]
+        self.plants=[Plant((r[0], c[0]), 0, 0, 0), Plant((r[0], c[1]), 0, 0, 0), Plant((r[0], c[2]), 0, 0, 0), Plant((r[0], c[3]), 0, 0, 0),
+                     Plant((r[1], c[0]), 0, 0, 0), Plant((r[1], c[1]), 0, 0, 0), Plant((r[1], c[2]), 0, 0, 0), Plant((r[1], c[3]), 0, 0, 0),
+                     Plant((r[2], c[0]), 0, 0, 0), Plant((r[2], c[1]), 0, 0, 0), Plant((r[2], c[2]), 0, 0, 0), 
+                     Plant((r[3], c[0]), 0, 0, 0), Plant((r[3], c[1]), 0, 0, 0)]
         
         self.size = vec(*RESOLUTION)
         self.background = Drawable((0,0), "background.png")
@@ -59,7 +59,7 @@ class GameEngine(object):
         self.tankcount= TextEntry((62,62),str(Zombie.Zombiecount))
         self.orb_creation_timer = 0
 
-        
+
     def draw(self, drawSurface):        
         self.background.draw(drawSurface)
         self.tankicon.draw(drawSurface)
@@ -68,7 +68,7 @@ class GameEngine(object):
         [o.draw(drawSurface) for o in self.zombies]
         [o.draw(drawSurface) for o in self.plants]
         # self.zombie.draw(drawSurface)
-        
+        # [p.draw_attack_range(drawSurface) for p in self.plants]
             
     def handleEvent(self, event):
               
@@ -101,17 +101,31 @@ class GameEngine(object):
         #     if len(self.orbs) < 10:
         #         self.orbs = [orb((0,5)),orb((0,45)),orb((0,85)),orb((0,125)),orb((0,165)),orb((0,205)),orb((0,245)),orb((0,285)),orb((0,325)),orb((0,365))]
 
-        self.orb_creation_timer += seconds
-        if self.orb_creation_timer >= 2:
-            self.orb_creation_timer = 0
-            for plant in self.plants:
-                pos = plant.position.copy()
-                pos[0] += 3
-                self.orbs.append(Orb(position=(pos)))
+        # self.orb_creation_timer += seconds
+        # if self.orb_creation_timer >= 2:
+        #     self.orb_creation_timer = 0
+        #     for plant in self.plants:
+        #         if plant.shooting == 1:
+        #             pos = plant.position.copy()
+        #             pos[0] += 3
+        #             self.orbs.append(Orb(position=(pos)))
+        
+        
+        
+        for plant in self.plants:
+            if plant.shooting == 1:
+                plant.starting += seconds
+                if plant.starting >= 2:
+                    plant.starting = 0
+                    pos = plant.position.copy()
+                    pos[0] += 3
+                    self.orbs.append(Orb(position=(pos)))
+
 
         self.tankcount= TextEntry((62,62),str(Zombie.Zombiecount))
         [o.update(seconds) for o in self.orbs]
         [o.update(seconds) for o in self.zombies]
+        
         
         
         for orb in self.orbs:
@@ -126,7 +140,13 @@ class GameEngine(object):
                     self.zombies[j].hp-=1
                     self.orbs.pop(r) 
                     break
-  
+
+        for j in range(len(self.zombies)):
+            for r in range(len(self.plants)):
+                if self.plants[r].attackRange.colliderect(self.zombies[j].hitBox):
+                    self.plants[r].shooting = 1
+
+                                    
         for j in range(len(self.zombies)):
             if self.zombies[j].hp <=0:
                 self.zombies.pop(j)  
