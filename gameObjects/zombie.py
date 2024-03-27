@@ -14,6 +14,7 @@ import numpy as np
 
 class Zombie(Mobile):
    Zombiecount=4
+   powerup = 1
    def __init__(self, position):
       super().__init__(position, "zom.png")
         
@@ -68,7 +69,8 @@ class Zombie(Mobile):
       
    def handleEvent(self, event):
       if event.type == KEYDOWN:
-         if event.key == K_UP:
+         if event.key == K_UP and Zombie.powerup > 0:
+            Zombie.powerup -=1
             self.pow=True
             self.hp=10
             self.attack=10

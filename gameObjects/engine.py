@@ -41,15 +41,16 @@ class GameEngine(object):
         # self.zombies = [Zombie((700,25)),Zombie((700,100)),Zombie((700,175)),Zombie((700,250))]
         # self.orbs_copy= [orb((0,5)),orb((0,45)),orb((0,85)),orb((0,125)),orb((0,165)),orb((0,205)),orb((0,245)),orb((0,285)),orb((0,325)),orb((0,365))]
         self.orbs=[]
+        self.win = False
         self.zombies=[]
         r=[5,58,58*2, 58*3, 58*4, 58*5]
         c=[80, 80*2, 80*3, 80*4, 80*5]
         
         self.plants=[Plant((r[0], c[0]), 0, 0, 0,reward=True), Plant((r[0], c[1]), 0, 0, 0,reward=True), Plant((r[0], c[2]), 0, 0, 0),
-                     Plant((r[1], c[0]), 0, 0, 0), Plant((r[1], c[1]), 0, 0, 0), Plant((r[1], c[2]), 0, 0, 0,reward=True), 
-                     Plant((r[2], c[0]), 0, 0, 0), Plant((r[2], c[1]), 0, 0, 0), Plant((r[2], c[2]), 0, 0, 0,reward=True), 
-                     Plant((r[3], c[0]), 0, 0, 0), Plant((r[3], c[1]), 0, 0, 0,reward=True)]
-        
+                Plant((r[1], c[0]), 0, 0, 0), Plant((r[1], c[1]), 0, 0, 0), Plant((r[1], c[2]), 0, 0, 0,reward=True), 
+                Plant((r[2], c[0]), 0, 0, 0), Plant((r[2], c[1]), 0, 0, 0), Plant((r[2], c[2]), 0, 0, 0,reward=True), 
+                Plant((r[3], c[0]), 0, 0, 0), Plant((r[3], c[1]), 0, 0, 0,reward=True)]
+
         self.size = vec(*RESOLUTION)
         self.background = Drawable((0,0), "background.png")
         self.tankicon = Drawable((5,5), "ticon.png")
@@ -67,6 +68,12 @@ class GameEngine(object):
         [o.draw(drawSurface) for o in self.orbs]
         [o.draw(drawSurface) for o in self.zombies]
         [o.draw(drawSurface) for o in self.plants]
+        
+        if self.win:
+            font = pygame.font.SysFont(None, 48)
+            text = font.render("You win!", True, (255, 255, 255))
+            text_rect = text.get_rect(center=(RESOLUTION[0] // 2, RESOLUTION[1] // 2))
+            drawSurface.blit(text, text_rect)
         # self.zombie.draw(drawSurface)
         # [p.draw_attack_range(drawSurface) for p in self.plants]
             
@@ -90,24 +97,8 @@ class GameEngine(object):
                 Zombie.Zombiecount -=1
                 
     def update(self, seconds):
-        # self.zombie.update(seconds)
-        # self.timer.update(seconds)
-        # print(self.timer.time)
-        # if self.timer.done():
-        #     self.timer.reset()
-        #     if len(self.orbs) < 10:
-        #         self.orbs = [orb((0,5)),orb((0,45)),orb((0,85)),orb((0,125)),orb((0,165)),orb((0,205)),orb((0,245)),orb((0,285)),orb((0,325)),orb((0,365))]
-
-        # self.orb_creation_timer += seconds
-        # if self.orb_creation_timer >= 2:
-        #     self.orb_creation_timer = 0
-        #     for plant in self.plants:
-        #         if plant.shooting == 1:
-        #             pos = plant.position.copy()
-        #             pos[0] += 3
-        #             self.orbs.append(Orb(position=(pos)))
-        
-        
+        if not self.plants:
+            self.win = True            
         
         for plant in self.plants:
             if plant.shooting == 1:
@@ -138,10 +129,24 @@ class GameEngine(object):
                     self.orbs.pop(r) 
                     break
 
+        zombieInRange = False
+
+        r = None
         for j in range(len(self.zombies)):
             for r in range(len(self.plants)):
                 if self.plants[r].attackRange.colliderect(self.zombies[j].hitBox):
                     self.plants[r].shooting = 1
+                    zombieInRange = True
+                    break 
+            else:
+                if r != None:
+                    self.plants[r].shooting = 0
+
+        if not zombieInRange:
+            for plant in self.plants:
+                plant.shooting = 0
+        
+        
 
                                     
         for j in range(len(self.zombies)):
@@ -149,12 +154,12 @@ class GameEngine(object):
                 self.zombies.pop(j)  
             break
     
-    
+    #error when plants are empty []
         for j in range(len(self.plants)):
             if self.plants[j].hp <=0:
-                self.plants.pop(j) 
                 if self.plants[j].reward:
                     Zombie.Zombiecount +=1
+                self.plants.pop(j) 
                 break
             
         for j in range(len(self.zombies)):
